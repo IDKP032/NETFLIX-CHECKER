@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NETFLIX C00KIES CHECKER</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-900 text-white min-h-screen">
+    <!-- Keep all the previous HTML exactly the same until the script tag -->
+    <div class="container mx-auto px-4 py-8">
+        <div class="text-center mb-12">
+            <h1 class="text-4xl font-bold text-red-600 mb-4">Netflix Cookie Checker</h1>
+            <p class="text-gray-400">Hackme Cookie Validation Tool</p>
+        </div>
+
+        <div class="max-w-4xl mx-auto bg-gray-800 rounded-lg shadow-xl p-6">
+            <div class="mb-8">
+                <div class="border-2 border-dashed border-gray-600 rounded-lg p-8 text-center">
+                    <div class="mb-4">
+                        <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
+                        </svg>
+                    </div>
+                    <div class="space-y-2">
+                        <div class="text-sm text-gray-300">
+                            <label for="file-upload" class="relative cursor-pointer bg-red-600 rounded-md font-medium text-white hover:bg-red-500 px-4 py-2">
+                                <span>Upload Cookies</span>
+                                <input id="file-upload" name="file-upload" type="file" class="sr-only" accept=".txt" multiple>
+                            </label>
+                        </div>
+                        <p class="text-xs text-gray-400">Upload your cookie files (TXT format)</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+                <div class="bg-gray-700 rounded-lg p-4">
+                    <div class="flex items-center">
+                        <div class="rounded-md bg-blue-500 p-3">
+                            <svg class="h-6 w-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                            </svg>
+                        </div>
+                        <div class="ml-4">
+                            <h2 class="text-sm font-medium text-gray-300">Total</h2>
+                            <p id="total-checked" class="text-2xl font-semibold">0</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-gray-700 rounded-lg p-4">
+                    <div class="flex items-center">
+                        <div class="rounded-md bg-green-500 p-3">
+                            <svg class="h-6 w-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                            </svg>
+                        </div>
+                        <div class="ml-4">
+                            <h2 class="text-sm font-medium text-gray-300">Working</h2>
+                            <p id="total-working" class="text-2xl font-semibold">0</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-gray-700 rounded-lg p-4">
+                    <div class="flex items-center">
+                        <div class="rounded-md bg-yellow-500 p-3">
+                            <svg class="h-6 w-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                            </svg>
+                        </div>
+                        <div class="ml-4">
+                            <h2 class="text-sm font-medium text-gray-300">Unsubscribed</h2>
+                            <p id="total-unsubscribed" class="text-2xl font-semibold">0</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-gray-700 rounded-lg p-4">
+                    <div class="flex items-center">
+                        <div class="rounded-md bg-red-500 p-3">
+                            <svg class="h-6 w-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                            </svg>
+                        </div>
+                        <div class="ml-4">
+                            <h2 class="text-sm font-medium text-gray-300">Failed</h2>
+                            <p id="total-failed" class="text-2xl font-semibold">0</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-700">
+                    <thead>
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Status</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Country</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Plan</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Extra Members</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="results-body" class="divide-y divide-gray-700">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div id="progress-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+        <div class="bg-gray-800 rounded-lg p-6 max-w-sm w-full mx-4">
+            <div class="mb-4">
+                <h3 class="text-lg font-medium text-center">Checking Cookies</h3>
+                <div class="mt-4">
+                    <div class="bg-gray-700 rounded-full">
+                        <div id="progress-bar" class="bg-red-600 rounded-full h-2 w-0 transition-all duration-300"></div>
+                    </div>
+                    <p id="progress-text" class="text-sm text-gray-400 text-center mt-2">0%</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global storage for cookies
+        const storage = {
+            cookies: []
+        };
+
+        // Initialize when document is ready
+        document.addEventListener('DOMContentLoaded', function() {
+            const fileInput = document.getElementById('file-upload');
+            const progressModal = document.getElementById('progress-modal');
+            const progressBar = document.getElementById('progress-bar');
+            const progressText = document.getElementById('progress-text');
+            const resultsBody = document.getElementById('results-body');
+
+            let stats = {
+                total: 0,
+                working: 0,
+                unsubscribed: 0,
+                failed: 0
+            };
+
+            // File upload handler
+            fileInput.addEventListener('change', async function(e) {
+                const files = Array.from(e.target.files);
+                if (!files.length) return;
+
+                // Reset everything
+                storage.cookies = [];
+                stats = { total: 0, working: 0, unsubscribed: 0, failed: 0 };
+                resultsBody.innerHTML = '';
+                updateStats();
+
+                // Show progress modal
+                progressModal.classList.remove('hidden');
+
+                // Process each file
+                for (let i = 0; i < files.length; i++) {
+                    const file = files[i];
+                    
+                    // Update progress
+                    const progress = ((i + 1) / files.length) * 100;
+                    progressBar.style.width = `${progress}%`;
+                    progressText.textContent = `${Math.round(progress)}%`;
+
+                    try {
+                        // Read file content
+                        const content = await readFile(file);
+                        
+                        // Process the cookie
+                        const result = await checkCookie(content);
+                        
+                        // Store cookie data
+                        const cookieData = {
+                            content: content,
+                            ...result
+                        };
+                        storage.cookies.push(cookieData);
+
+                        // Update UI
+                        updateStats(result.status);
+                        addResultRow(cookieData, storage.cookies.length - 1);
+
+                    } catch (error) {
+                        console.error('Error processing file:', error);
+                        stats.failed++;
+                        updateStats();
+                    }
+                }
+
+                // Hide progress modal
+                setTimeout(() => progressModal.classList.add('hidden'), 500);
+            });
+
+            // File reader helper
+            function readFile(file) {
+                return new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.onload = e => resolve(e.target.result);
+                    reader.onerror = e => reject(e);
+                    reader.readAsText(file);
+                });
+            }
+
+            // Update statistics
+            function updateStats(status) {
+                if (status) {
+                    stats.total++;
+                    if (status === 'working') stats.working++;
+                    else if (status === 'unsubscribed') stats.unsubscribed++;
+                    else stats.failed++;
+                }
+
+                document.getElementById('total-checked').textContent = stats.total;
+                document.getElementById('total-working').textContent = stats.working;
+                document.getElementById('total-unsubscribed').textContent = stats.unsubscribed;
+                document.getElementById('total-failed').textContent = stats.failed;
+            }
+
+            // Add result row to table
+            function addResultRow(data, index) {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
+                            ${data.status === 'working' ? 'bg-green-100 text-green-800' : 
+                            data.status === 'unsubscribed' ? 'bg-yellow-100 text-yellow-800' : 
+                            'bg-red-100 text-red-800'}">
+                            ${data.status}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">${data.country || 'N/A'}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">${data.plan || 'N/A'}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">${data.extraMembers ? 'Yes' : 'No'}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                        <button onclick="downloadCookie(${index})" class="text-red-500 hover:text-red-400">Download</button>
+                    </td>
+                `;
+                resultsBody.appendChild(row);
+            }
+
+            // Simulate cookie checking
+            async function checkCookie(content) {
+                return new Promise(resolve => {
+                    setTimeout(() => {
+                        const random = Math.random();
+                        if (random < 0.6) {
+                            resolve({
+                                status: 'working',
+                                country: 'US',
+                                plan: 'Premium',
+                                extraMembers: Math.random() > 0.5
+                            });
+                        } else if (random < 0.8) {
+                            resolve({
+                                status: 'unsubscribed',
+                                country: 'US',
+                                plan: 'None',
+                                extraMembers: false
+                            });
+                        } else {
+                            resolve({
+                                status: 'failed',
+                                country: null,
+                                plan: null,
+                                extraMembers: false
+                            });
+                        }
+                    }, 500);
+                });
+            }
+        });
+
+        // Global download function
+        function downloadCookie(index) {
+            const cookieData = storage.cookies[index];
+            if (!cookieData) return;
+
+            const blob = new Blob([cookieData.content], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `Hackme_cookie_${cookieData.status}_${Date.now()}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+    </script>
+</body>
+</html>
